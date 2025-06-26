@@ -2,8 +2,8 @@ import json
 
 
 def load_data(file_path):
-    """Load JSON data from a file."""
-    with open(file_path, "r") as handle:
+    """Load JSON data from a file using UTF-8 encoding."""
+    with open(file_path, "r", encoding="utf-8") as handle:
         return json.load(handle)
 
 
@@ -32,7 +32,7 @@ def serialize_animal(animal_obj):
 
 
 def serialize_animals(data):
-    """Serialize all animals into an HTML cards list."""
+    """Serialize all animals into a single string of HTML list items."""
     output = ""
     for animal in data:
         output += serialize_animal(animal)
@@ -40,18 +40,23 @@ def serialize_animals(data):
 
 
 def create_html(data, template_file, output_file):
-    """Read the template, insert animal data, and write final HTML."""
-    with open(template_file, "r") as handle:
+    """Read the template, insert animal data, and write final HTML using UTF-8 encoding."""
+    with open(template_file, "r", encoding="utf-8") as handle:
         html_template = handle.read()
 
     animals_html = serialize_animals(data)
-
     final_html = html_template.replace("__REPLACE_ANIMALS_INFO__", animals_html)
 
-    with open(output_file, "w") as handle:
+    with open(output_file, "w", encoding="utf-8") as handle:
         handle.write(final_html)
 
 
+def main():
+    """Main entry point for generating the animals HTML file."""
+    data = load_data("animals_data.json")  # Load data from JSON file
+    create_html(data, "animals_template.html", "animals.html")  # Generate final HTML
+
+
 if __name__ == "__main__":
-    data = load_data("animals_data.json")  # load data
-    create_html(data, "animals_template.html", "animals.html")  # create final html
+    main()
+ 
